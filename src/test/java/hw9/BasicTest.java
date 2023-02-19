@@ -10,11 +10,9 @@ import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
+import org.testng.annotations.*;
 import utils.Endpoints;
 
-import static io.restassured.RestAssured.given;
 
 
 public class BasicTest {
@@ -28,7 +26,8 @@ public class BasicTest {
     ChecklistEntity checklist;
 
 
-    @BeforeClass
+
+    @BeforeMethod
     public static void setup() {
         var ApiToken = System.getenv("token");
         var ApiKey = System.getenv("key");
@@ -43,27 +42,19 @@ public class BasicTest {
                 .expectStatusCode(200).build();
 
         notFoundResponseSpecification = new ResponseSpecBuilder().expectStatusCode(404).build();
-
+        BoardTest.createBoard();
+        BoardTest.createListOnTheBoard();
+        CardsTest.createCard();
     }
 
-    @AfterClass
+
+    @AfterMethod
     public void close() {
         if (board != null) {
-            deleteBoard(board.id());
+            ServiceObject.deleteBoardAfterTest(board.id());
         }
         RestAssured.reset();
         baseRequestSpecification = null;
-    }
-
-    protected void deleteBoard(String boardId) {
-            given()
-                    .spec(baseRequestSpecification)
-                    .when().basePath(Endpoints.Board_ID_Url)
-                    .pathParam("id", boardId)
-                    .delete()
-                    .then()
-                    .log().all()
-                    .spec(responseSpecification);
     }
 
 }

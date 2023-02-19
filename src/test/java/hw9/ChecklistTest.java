@@ -11,9 +11,6 @@ public class ChecklistTest extends BasicTest {
 
     @Test
     public void createChecklist() {
-        if (card == null) {
-            CardsTest.createCard();
-        }
         checklist = given().spec(baseRequestSpecification)
                 .when()
                 .queryParam("idCard", card.id())
@@ -27,9 +24,7 @@ public class ChecklistTest extends BasicTest {
 
     @Test
     public void deleteChecklist() {
-        if (checklist == null) {
-            createChecklist();
-        }
+        createChecklist();
         given().spec(baseRequestSpecification)
                 .when()
                 .basePath(Endpoints.Checklist_ID_Url)
@@ -44,6 +39,5 @@ public class ChecklistTest extends BasicTest {
                 .get()
                 .then()
                 .spec(notFoundResponseSpecification);
-        BoardTest.deleteBoard();
     }
 }

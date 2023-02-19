@@ -6,7 +6,7 @@ import static org.hamcrest.Matchers.equalTo;
 import entity.BoardEntity;
 import entity.ListEntity;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 import utils.Endpoints;
 
 
@@ -16,7 +16,7 @@ public class BoardTest extends BasicTest {
 
     static String listName = RandomStringUtils.random(40, true, true);
 
-    @Test
+    @Test()
     public static void createBoard() {
         board = given().spec(baseRequestSpecification)
                 .when()
@@ -31,9 +31,6 @@ public class BoardTest extends BasicTest {
 
     @Test
     public void getInfoAboutBoard() {
-        if (board == null) {
-            createBoard();
-        }
         board = given().spec(baseRequestSpecification)
                 .when()
                 .basePath(Endpoints.Board_ID_Url)
@@ -48,9 +45,6 @@ public class BoardTest extends BasicTest {
 
     @Test
     public void editBoard() {
-        if (board == null) {
-            createBoard();
-        }
         String descriptionForBoard = RandomStringUtils.random(100, true, true);
         var boardNew = BoardEntity.builder().desc(descriptionForBoard).id(board.id()).build();
         board = given().spec(baseRequestSpecification)
@@ -69,34 +63,26 @@ public class BoardTest extends BasicTest {
 
     @Test
     public static void deleteBoard() {
-        if (board != null) {
-            given()
-                    .spec(baseRequestSpecification)
-                    .when()
-                    .basePath(Endpoints.Board_ID_Url)
-                    .pathParam("id", board.id())
-                    .delete()
-                    .then().spec(responseSpecification);
-            given()
-                    .spec(baseRequestSpecification)
-                    .when()
-                    .basePath(Endpoints.Board_ID_Url)
-                    .pathParam("id", board.id())
-                    .get()
-                    .then()
-                    .spec(notFoundResponseSpecification);
-            System.out.printf("Board with id = %s deleted%n", board.id());
-            board = null;
-        } else {
-            System.out.println("Board is not found. May be board was removed before.");
-        }
+        given()
+                .spec(baseRequestSpecification)
+                .when()
+                .basePath(Endpoints.Board_ID_Url)
+                .pathParam("id", board.id())
+                .delete()
+                .then().spec(responseSpecification);
+        given()
+                .spec(baseRequestSpecification)
+                .when()
+                .basePath(Endpoints.Board_ID_Url)
+                .pathParam("id", board.id())
+                .get()
+                .then()
+                .spec(notFoundResponseSpecification);
+        board = null;
     }
 
     @Test
     public static void createListOnTheBoard() {
-        if (board == null) {
-            createBoard();
-        }
         list = given()
                 .spec(baseRequestSpecification)
                 .when()

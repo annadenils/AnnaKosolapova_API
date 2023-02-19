@@ -5,17 +5,15 @@ import static org.hamcrest.Matchers.equalTo;
 
 import entity.CardEntity;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 import utils.Endpoints;
 
 public class CardsTest extends BasicTest {
+
     static String cardName = RandomStringUtils.random(40, true, true);
 
     @Test
     public static void createCard() {
-        if (list == null) {
-            BoardTest.createListOnTheBoard();
-        }
         card = given()
                 .spec(baseRequestSpecification)
                 .when()
@@ -31,9 +29,6 @@ public class CardsTest extends BasicTest {
 
     @Test
     public void updateCard() {
-        if (card == null) {
-            createCard();
-        }
         var newCard = CardEntity.builder().id(card.id()).name(cardName).build();
         card =  given()
                 .spec(baseRequestSpecification)
@@ -51,9 +46,6 @@ public class CardsTest extends BasicTest {
 
     @Test
     public void getInfoAboutCard() {
-        if (card == null) {
-            createCard();
-        }
         card = given()
                 .spec(baseRequestSpecification)
                 .basePath(Endpoints.Card_ID_Url)
@@ -68,9 +60,6 @@ public class CardsTest extends BasicTest {
 
     @Test
     public void deleteCard() {
-        if (card == null) {
-            createCard();
-        }
         given().spec(baseRequestSpecification)
                 .when()
                 .basePath(Endpoints.Card_ID_Url)
