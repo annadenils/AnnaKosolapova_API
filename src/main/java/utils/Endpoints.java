@@ -5,7 +5,10 @@ public class Endpoints {
     public static final String Basic_Url = "https://api.trello.com/1";
     public static final String Board_Url = "/boards";
     public static final String Board_ID_Url = "/boards/{id}";
+    public static final String Board_ID_Url_v2 = "/boards/%s";
+    public static final String Board_All_Url = "/members/me/boards/";
     public static final String Card_ID_Url = "/cards/{id}";
+    public static final String Card_ID_Url_v2 = "/cards/%s";
     public static final String Card_Url = "/cards";
     public static final String List_Url = "/lists";
     public static final String Checklist_Url = "/checklists";
