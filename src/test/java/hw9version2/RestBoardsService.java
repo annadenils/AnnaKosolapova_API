@@ -22,12 +22,13 @@ public class RestBoardsService extends BaseService {
         return restBoardsService;
     }
 
-    static String boardName = RandomStringUtils.random(40, true, true);
-    static String listName = RandomStringUtils.random(40, true, true);
+    public BoardEntity createBoardWithRandomName() {
+        return createBoard(RandomStringUtils.random(40, true, true));
+    }
 
-    public BoardEntity createBoard() {
+    public BoardEntity createBoard(String name) {
         HashMap<String, String> boardParameters = new HashMap<>();
-        boardParameters.put("name", boardName);
+        boardParameters.put("name", name);
 
         Response response = new BaseService().post(boardParameters, Endpoints.Board_Url);
         response.then().statusCode(Matchers.equalTo(HttpStatus.SC_OK));
@@ -48,7 +49,7 @@ public class RestBoardsService extends BaseService {
 
     public ListEntity createList(String boardId) {
         HashMap<String, String> boardParameters = new HashMap<>();
-        boardParameters.put("name", listName);
+        boardParameters.put("name", RandomStringUtils.random(40, true, true));
         boardParameters.put("idBoard", boardId);
 
         Response response = new BaseService().post(boardParameters, Endpoints.List_Url);

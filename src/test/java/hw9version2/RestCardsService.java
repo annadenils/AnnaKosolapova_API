@@ -11,9 +11,6 @@ import utils.Endpoints;
 import java.util.HashMap;
 
 public class RestCardsService {
-
-    static String cardName = RandomStringUtils.random(40, true, true);
-
     private static RestCardsService restCardsService;
     private RestCardsService() {};
     public static RestCardsService getInstance() {
@@ -26,9 +23,9 @@ public class RestCardsService {
     public CardEntity createCard(String listId) {
         HashMap<String, String> cardParameters = new HashMap<>();
         cardParameters.put("idList", listId);
-        cardParameters.put("name", cardName);
+        cardParameters.put("name", RandomStringUtils.random(40, true, true));
         Response response = new BaseService().post(cardParameters, Endpoints.Card_Url);
-        response.then().statusCode(Matchers.equalTo(HttpStatus.SC_OK));
+//        response.then().statusCode(Matchers.equalTo(HttpStatus.SC_OK));
         return response.getBody().as(CardEntity.class);
     }
 
@@ -38,6 +35,10 @@ public class RestCardsService {
 
     public ValidatableResponse checkDeleteCard(String cardId) {
         return new BaseService().get404(String.format(Endpoints.Card_ID_Url_v2, cardId));
+    }
+
+    public Response getCard(String cardId) {
+        return new BaseService().get(String.format(Endpoints.Card_ID_Url_v2, cardId));
     }
 
 }

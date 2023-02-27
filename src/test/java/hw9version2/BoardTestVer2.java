@@ -2,24 +2,20 @@ package hw9version2;
 
 import entity.BoardEntity;
 import entity.ListEntity;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
+
 import java.util.Arrays;
 
 
 public class BoardTestVer2 {
-    static RestBoardsService restBoardsService;
-    static BoardEntity board;
-    static ListEntity list;
+    private RestBoardsService restBoardsService;
 
-    @BeforeMethod
+    @BeforeClass
     public void setup() {
         restBoardsService = RestBoardsService.getInstance();
-        createBoard();
     }
 
-    @AfterMethod
+    @AfterClass
     public void close() {
         Arrays.stream(restBoardsService.getBoards()).map(BoardEntity::id)
                 .forEach(restBoardsService::deleteBoard);
@@ -27,19 +23,31 @@ public class BoardTestVer2 {
 
     @Test
     public void createBoard() {
-        board = restBoardsService.createBoard();
-        new BoardAssertions(board).checkBoardId(board.id()).checkBoardName(board.nameBoard());
+        BoardEntity board = restBoardsService.createBoard("NewBoard");
+        new Assertions().checkCode200();
+    }
+
+    @Test
+    public void createBoardWithRandomName() {
+        BoardEntity board = restBoardsService.createBoardWithRandomName();
+        new Assertions().checkCode200();
+        new Assertions().checkBoardName(board, board.nameBoard());
     }
 
     @Test
     public void deleteBoard() {
+        BoardEntity board = restBoardsService.createBoard("newBoard");
         restBoardsService.deleteBoard(board.id());
+        new Assertions().checkCode200();
         restBoardsService.checkDeleteBoard(board.id());
     }
 
     @Test
     public void createList() {
-        list = restBoardsService.createList(board.id());
+        BoardEntity board = restBoardsService.createBoard("newBoard");
+        ListEntity list = restBoardsService.createList(board.id());
+        new Assertions().checkCode200();
+        new Assertions().checkListName(list, list.name());
     }
 
 }

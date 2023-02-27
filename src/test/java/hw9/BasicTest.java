@@ -50,9 +50,9 @@ public class BasicTest {
 
     @AfterMethod
     public void close() {
-        if (board != null) {
-            ServiceObject.deleteBoardAfterTest(board.id());
-        }
+//        if (board != null) {
+//            ServiceObject.deleteBoardAfterTest(board.id());
+//        }
         RestAssured.reset();
         baseRequestSpecification = null;
     }

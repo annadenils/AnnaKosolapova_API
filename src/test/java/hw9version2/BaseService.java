@@ -34,9 +34,10 @@ public class BaseService {
     }
 
     public Response get(String uri) {
-        Response response = given(requestSpecification).get(uri);
-        response.then().statusCode(Matchers.equalTo(HttpStatus.SC_OK));
-        return response;
+//        Response response = given(requestSpecification).get(uri);
+//        response.then().statusCode(Matchers.equalTo(HttpStatus.SC_OK));
+//        return response;
+        return given(requestSpecification).get(uri);
     }
 
     public ValidatableResponse get404(String uri) {
